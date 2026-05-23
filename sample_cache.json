@@ -1,0 +1,116 @@
+{
+  "sample_input": "Login Feature: User authentication with email and password\n- Valid email and password should grant access\n- Invalid password shows error message\n- Account locks after 3 failed attempts\n- Email must be validated before login\n- Password must be at least 8 characters\n- Session expires after 30 minutes of inactivity",
+  "sample_output": [
+    {
+      "test_id": "TC_001",
+      "scenario": "Valid login with correct credentials",
+      "preconditions": "User account exists with email 'user@example.com' and password 'ValidPass123'; User is on login page",
+      "steps": "Step 1: Enter email 'user@example.com'\nStep 2: Enter password 'ValidPass123'\nStep 3: Click 'Login' button\nStep 4: Observe redirect",
+      "expected_result": "User successfully logged in, session created, redirected to dashboard",
+      "priority": "High",
+      "type": "Positive",
+      "automation_hint": "Use Selenium/Cypress to fill login form, assert dashboard URL",
+      "why_it_matters": "Core functionality - users must be able to log in with valid credentials"
+    },
+    {
+      "test_id": "TC_002",
+      "scenario": "Login with incorrect password",
+      "preconditions": "User account exists with email 'user@example.com'; User is on login page",
+      "steps": "Step 1: Enter email 'user@example.com'\nStep 2: Enter password 'WrongPassword123'\nStep 3: Click 'Login' button\nStep 4: Check error message",
+      "expected_result": "Login fails, error message 'Invalid credentials' displayed, user remains on login page",
+      "priority": "High",
+      "type": "Negative",
+      "automation_hint": "Verify error message text using Selenium find_element, assert page URL unchanged",
+      "why_it_matters": "Security - system must reject invalid passwords to prevent unauthorized access"
+    },
+    {
+      "test_id": "TC_003",
+      "scenario": "Login with non-existent email",
+      "preconditions": "No user account exists with email 'nonexistent@example.com'; User is on login page",
+      "steps": "Step 1: Enter email 'nonexistent@example.com'\nStep 2: Enter password 'RandomPass123'\nStep 3: Click 'Login' button\nStep 4: Observe response",
+      "expected_result": "Login fails, generic error message displayed (should not reveal if email exists)",
+      "priority": "High",
+      "type": "Negative",
+      "automation_hint": "Assert same error message as TC_002, no email enumeration possible",
+      "why_it_matters": "Security - prevents user enumeration attacks by not revealing which emails are registered"
+    },
+    {
+      "test_id": "TC_004",
+      "scenario": "Account lockout after 3 failed login attempts",
+      "preconditions": "User account exists; User is on login page",
+      "steps": "Step 1: Enter correct email and wrong password\nStep 2: Click 'Login' - Attempt 1 fails\nStep 3: Repeat Step 1-2 for Attempt 2 (fails)\nStep 4: Repeat Step 1-2 for Attempt 3 (fails)\nStep 5: Enter correct credentials\nStep 6: Click 'Login'",
+      "expected_result": "After 3rd failed attempt, account is locked. 4th attempt with correct credentials shows 'Account locked' message",
+      "priority": "High",
+      "type": "Negative",
+      "automation_hint": "Use loop to simulate 3 failed attempts, then assert lockout message and account status in DB",
+      "why_it_matters": "Security - prevents brute force attacks by locking accounts after multiple failed attempts"
+    },
+    {
+      "test_id": "TC_005",
+      "scenario": "Password with less than 8 characters",
+      "preconditions": "User is on login page",
+      "steps": "Step 1: Enter email 'user@example.com'\nStep 2: Enter password 'Pass123' (7 characters)\nStep 3: Click 'Login' button",
+      "expected_result": "Validation error shown immediately, button disabled or error message 'Password must be at least 8 characters'",
+      "priority": "Medium",
+      "type": "Edge",
+      "automation_hint": "Assert form validation before API call, check client-side validation first",
+      "why_it_matters": "Data validation - ensures password requirements are enforced for security standards"
+    },
+    {
+      "test_id": "TC_006",
+      "scenario": "Session expires after 30 minutes of inactivity",
+      "preconditions": "User is logged in and navigating the dashboard",
+      "steps": "Step 1: User logs in successfully\nStep 2: Wait 30 minutes (or mock time advancement)\nStep 3: User attempts to make a request from dashboard\nStep 4: Observe redirect",
+      "expected_result": "Session expires, user is logged out, redirected to login page with message 'Session expired'",
+      "priority": "High",
+      "type": "Edge",
+      "automation_hint": "Mock system time or use API to advance clock, check token expiry in response headers",
+      "why_it_matters": "Security - inactive sessions must expire to prevent unauthorized access on shared devices"
+    },
+    {
+      "test_id": "TC_007",
+      "scenario": "SQL injection attempt in email field",
+      "preconditions": "User is on login page",
+      "steps": "Step 1: Enter email \"admin' OR '1'='1\"\nStep 2: Enter password 'anything'\nStep 3: Click 'Login' button",
+      "expected_result": "Login fails, malicious input is sanitized, error message 'Invalid credentials' shown",
+      "priority": "High",
+      "type": "Negative",
+      "automation_hint": "Use security testing tools like OWASP ZAP, verify input sanitization in backend logs",
+      "why_it_matters": "Security - SQL injection attacks must be prevented through proper input validation"
+    },
+    {
+      "test_id": "TC_008",
+      "scenario": "Empty email and password fields",
+      "preconditions": "User is on login page",
+      "steps": "Step 1: Leave email field empty\nStep 2: Leave password field empty\nStep 3: Click 'Login' button",
+      "expected_result": "Validation error shown for both fields, 'Email is required' and 'Password is required' messages",
+      "priority": "Medium",
+      "type": "Edge",
+      "automation_hint": "Assert error messages for each field, verify form submission is blocked",
+      "why_it_matters": "User experience - proper validation feedback helps users understand required fields"
+    },
+    {
+      "test_id": "TC_009",
+      "scenario": "Login with email containing uppercase letters",
+      "preconditions": "User account exists with email 'user@example.com'; User is on login page",
+      "steps": "Step 1: Enter email 'USER@EXAMPLE.COM' (uppercase)\nStep 2: Enter correct password\nStep 3: Click 'Login' button",
+      "expected_result": "Login succeeds - email comparison should be case-insensitive",
+      "priority": "Medium",
+      "type": "Edge",
+      "automation_hint": "Normalize email to lowercase before comparison, verify login succeeds with different cases",
+      "why_it_matters": "Usability - email comparison should be case-insensitive to match RFC 5321 standards"
+    },
+    {
+      "test_id": "TC_010",
+      "scenario": "Login with extra spaces in email",
+      "preconditions": "User account exists with email 'user@example.com'; User is on login page",
+      "steps": "Step 1: Enter email ' user@example.com ' (with leading/trailing spaces)\nStep 2: Enter correct password\nStep 3: Click 'Login' button",
+      "expected_result": "Login succeeds - spaces are trimmed, user is authenticated",
+      "priority": "Low",
+      "type": "Edge",
+      "automation_hint": "Trim whitespace from input fields before validation, assert login success",
+      "why_it_matters": "User experience - accidental spaces shouldn't prevent login, improve usability"
+    }
+  ],
+  "coverage_report": "## Coverage Analysis Report\n\n### Test Distribution\n- **Positive Tests**: 1 (10%) - Happy path login flow\n- **Negative Tests**: 4 (40%) - Error handling, security threats\n- **Edge Cases**: 5 (50%) - Boundary conditions, data normalization\n\n### Coverage Score: 85/100\n\n### What's Covered ✅\n- Core authentication flow (valid login)\n- Invalid credential handling\n- Account lockout mechanism (brute force protection)\n- Session management and timeout\n- Input validation (password length, required fields)\n- Email normalization (case-insensitive, whitespace trimming)\n- Security threats (SQL injection, email enumeration)\n\n### Gaps & Recommendations 🎯\n1. **Two-Factor Authentication (2FA)** - Not covered. Consider adding tests for OTP/authenticator app flows\n2. **Password Reset Flow** - Not covered. Suggest adding 5-7 tests for forgot password functionality\n3. **HTTPS/TLS Validation** - Not explicitly tested. Verify all auth requests use HTTPS\n4. **Rate Limiting** - Not tested. Add tests for API rate limiting to prevent brute force\n5. **Remember Me Functionality** - Not covered if available\n\n### Risk Assessment\n- **High Risk**: Account lockout logic must be bulletproof (test TC_004 critical)\n- **High Risk**: Session expiry timing crucial for security (test TC_006 critical)\n- **High Risk**: SQL injection prevention essential (test TC_007 critical)\n\n### Recommended Additional Areas\n- OAuth/SSO integrations if supported\n- Device fingerprinting and unusual login detection\n- Password strength requirements enforcement\n- Login attempt logging and monitoring"
+}

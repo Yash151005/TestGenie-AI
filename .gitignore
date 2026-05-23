@@ -1,0 +1,115 @@
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+venv/
+.venv
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.project
+.pydevproject
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# Streamlit
+.streamlit/
+streamlit_cache/
+streamlit_cache_app/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# OS
+.DS_Store
+Thumbs.db
+.AppleDouble
+.LSOverride
+
+# Logs
+*.log
+logs/
+
+# Local development
+*.local
+.cache/
+temp/
+tmp/
+
+# IDE
+.vscode/settings.json
+.vscode/launch.json
+.idea/workspace.xml
+
+# Build artifacts
+build/
+dist/
+*.whl
+*.tar.gz
+
+# Misc
+.git/
+.github/
+.gitattributes
+node_modules/
+package-lock.json
+yarn.lock
+
+# Test outputs
+test_output/
+results/
+*.csv
+*.xlsx
+
+# Secrets
+secrets/
+credentials/
+keys/
